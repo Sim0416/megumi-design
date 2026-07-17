@@ -34,6 +34,7 @@ export const servicesQuery = groq`
     title,
     excerpt,
     image,
+    gallery,
     "slug": slug.current
   }
 `;

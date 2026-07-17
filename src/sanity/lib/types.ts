@@ -37,6 +37,7 @@ export interface Service {
   title: string;
   excerpt?: string;
   image?: Image;
+  gallery?: Image[];
   slug?: string;
 }
 

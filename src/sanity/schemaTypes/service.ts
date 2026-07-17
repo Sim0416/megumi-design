@@ -32,9 +32,16 @@ export const service = defineType({
     }),
     defineField({
       name: "image",
-      title: "图片",
+      title: "封面图片",
       type: "image",
       options: { hotspot: true },
+    }),
+    defineField({
+      name: "gallery",
+      title: "详情图集（点开卡片后可展示的图片，建议 4 张）",
+      type: "array",
+      of: [{ type: "image", options: { hotspot: true } }],
+      validation: (Rule) => Rule.max(4),
     }),
     defineField({
       name: "order",

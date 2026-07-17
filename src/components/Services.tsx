@@ -9,20 +9,26 @@ import { urlFor } from "@/sanity/lib/image";
 import type { Service } from "@/sanity/lib/types";
 
 export function Services({ services }: { services: Service[] }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openServiceId, setOpenServiceId] = useState<string | null>(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
 
-  const withImages = useMemo(
-    () =>
-      services
-        .map((service) => ({
-          service,
-          url: service.image ? urlFor(service.image).auto("format").url() : null,
-        }))
-        .filter((s): s is { service: Service; url: string } => Boolean(s.url)),
-    [services]
-  );
+  const openService = services.find((s) => s._id === openServiceId) ?? null;
 
-  const current = openIndex !== null ? withImages[openIndex] : null;
+  const photos = useMemo(() => {
+    if (!openService) return [];
+    return [openService.image, ...(openService.gallery ?? [])].filter(
+      (img): img is NonNullable<typeof img> => Boolean(img)
+    );
+  }, [openService]);
+
+  function openGallery(service: Service) {
+    setOpenServiceId(service._id);
+    setPhotoIndex(0);
+  }
+
+  function closeGallery() {
+    setOpenServiceId(null);
+  }
 
   return (
     <section
@@ -56,9 +62,7 @@ export function Services({ services }: { services: Service[] }) {
             const imageUrl = service.image
               ? urlFor(service.image).width(800).height(600).url()
               : null;
-            const lightboxIndex = imageUrl
-              ? withImages.findIndex((s) => s.service._id === service._id)
-              : -1;
+            const photoCount = (service.image ? 1 : 0) + (service.gallery?.length ?? 0);
 
             return (
               <Reveal
@@ -80,12 +84,18 @@ export function Services({ services }: { services: Service[] }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/60 to-transparent" />
                 </div>
 
-                {lightboxIndex >= 0 && (
+                {photoCount > 0 && (
                   <button
-                    aria-label={`View larger photo of ${service.title}`}
-                    onClick={() => setOpenIndex(lightboxIndex)}
+                    aria-label={`View photos of ${service.title}`}
+                    onClick={() => openGallery(service)}
                     className="absolute inset-0 z-20 cursor-zoom-in"
                   />
+                )}
+
+                {photoCount > 1 && (
+                  <span className="absolute right-6 top-6 z-10 rounded-full border border-gold-500/40 bg-ink-950/60 px-3 py-1 font-body text-xs uppercase tracking-[0.15em] text-gold-400">
+                    {photoCount} photos
+                  </span>
                 )}
 
                 <div className="relative z-10">
@@ -106,18 +116,22 @@ export function Services({ services }: { services: Service[] }) {
       </div>
 
       <ImageLightboxModal
-        src={current?.url ?? null}
-        alt={current?.service.title ?? ""}
-        caption={current?.service.title}
-        onClose={() => setOpenIndex(null)}
+        src={photos[photoIndex] ? urlFor(photos[photoIndex]).auto("format").url() : null}
+        alt={openService?.title ?? ""}
+        caption={
+          photos.length > 1
+            ? `${openService?.title} — ${photoIndex + 1} / ${photos.length}`
+            : openService?.title
+        }
+        onClose={closeGallery}
         onPrev={
-          withImages.length > 1
-            ? () => setOpenIndex((i) => (i === null ? null : (i - 1 + withImages.length) % withImages.length))
+          photos.length > 1
+            ? () => setPhotoIndex((i) => (i - 1 + photos.length) % photos.length)
             : undefined
         }
         onNext={
-          withImages.length > 1
-            ? () => setOpenIndex((i) => (i === null ? null : (i + 1) % withImages.length))
+          photos.length > 1
+            ? () => setPhotoIndex((i) => (i + 1) % photos.length)
             : undefined
         }
       />

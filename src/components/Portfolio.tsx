@@ -17,9 +17,22 @@ export function Portfolio({ projects }: { projects: Project[] }) {
 
   const [active, setActive] = useState("All");
   const [selected, setSelected] = useState<Project | null>(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);
 
   const filtered =
     active === "All" ? projects : projects.filter((p) => p.category === active);
+
+  const galleryImages = useMemo(() => {
+    if (!selected) return [];
+    return [selected.coverImage, ...(selected.gallery ?? [])].filter(
+      (img): img is NonNullable<typeof img> => Boolean(img)
+    );
+  }, [selected]);
+
+  function openProject(project: Project) {
+    setSelected(project);
+    setGalleryIndex(0);
+  }
 
   return (
     <section id="portfolio" className="relative bg-ink-950 py-28 md:py-36">
@@ -71,7 +84,7 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.96 }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  onClick={() => setSelected(project)}
+                  onClick={() => openProject(project)}
                   className="group relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-gold-700/20 text-left"
                 >
                   {imageUrl ? (
@@ -124,11 +137,12 @@ export function Portfolio({ projects }: { projects: Project[] }) {
               onClick={(e) => e.stopPropagation()}
               className="relative grid max-h-[85vh] w-full max-w-4xl grid-cols-1 overflow-y-auto rounded-sm border border-gold-700/30 bg-ink-900 md:grid-cols-2"
             >
-              <div className="relative min-h-[260px] w-full md:min-h-full">
-                {selected.coverImage ? (
+              <div className="group relative min-h-[260px] w-full md:min-h-full">
+                {galleryImages.length > 0 ? (
                   <Image
-                    src={urlFor(selected.coverImage).width(1800).height(2200).url()}
-                    alt={selected.title}
+                    key={galleryIndex}
+                    src={urlFor(galleryImages[galleryIndex]).width(1800).height(2200).url()}
+                    alt={`${selected.title} ${galleryIndex + 1}`}
                     fill
                     unoptimized
                     className="object-cover"
@@ -139,6 +153,39 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                       {selected.title.charAt(0)}
                     </span>
                   </div>
+                )}
+
+                {galleryImages.length > 1 && (
+                  <>
+                    <button
+                      aria-label="Previous photo"
+                      onClick={() =>
+                        setGalleryIndex((i) => (i - 1 + galleryImages.length) % galleryImages.length)
+                      }
+                      className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-paper-100/30 bg-ink-950/60 text-paper-100 opacity-0 transition-opacity duration-300 hover:border-gold-400 hover:text-gold-400 group-hover:opacity-100"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      aria-label="Next photo"
+                      onClick={() => setGalleryIndex((i) => (i + 1) % galleryImages.length)}
+                      className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-paper-100/30 bg-ink-950/60 text-paper-100 opacity-0 transition-opacity duration-300 hover:border-gold-400 hover:text-gold-400 group-hover:opacity-100"
+                    >
+                      ›
+                    </button>
+                    <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+                      {galleryImages.map((_, i) => (
+                        <button
+                          key={i}
+                          aria-label={`View photo ${i + 1}`}
+                          onClick={() => setGalleryIndex(i)}
+                          className={`h-1.5 rounded-full transition-all ${
+                            i === galleryIndex ? "w-5 bg-gold-400" : "w-1.5 bg-paper-100/40"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </>
                 )}
               </div>
               <div className="p-8 md:p-10">
