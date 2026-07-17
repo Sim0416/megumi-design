@@ -8,6 +8,11 @@ import type { SiteSettings } from "@/sanity/lib/types";
 export function Contact({ settings }: { settings: SiteSettings }) {
   const [sent, setSent] = useState(false);
 
+  const address = settings.address ?? "";
+  const mapEmbedUrl =
+    settings.mapUrl ?? `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
+  const mapLinkUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
@@ -80,22 +85,22 @@ export function Contact({ settings }: { settings: SiteSettings }) {
               </div>
             </dl>
 
-            {settings.mapUrl ? (
-              <div className="mt-10 aspect-video w-full overflow-hidden rounded-sm border border-gold-700/30">
-                <iframe
-                  src={settings.mapUrl}
-                  loading="lazy"
-                  className="h-full w-full"
-                  title="Megumi Design location"
-                />
-              </div>
-            ) : (
-              <div className="mt-10 flex aspect-video w-full items-center justify-center rounded-sm border border-gold-700/30 bg-ink-950/60">
-                <span className="font-display text-sm uppercase tracking-[0.3em] text-paper-100/25">
-                  Map
-                </span>
-              </div>
-            )}
+            <div className="group relative mt-10 aspect-video w-full overflow-hidden rounded-sm border border-gold-700/30">
+              <iframe
+                src={mapEmbedUrl}
+                loading="lazy"
+                className="h-full w-full grayscale-[35%] contrast-[1.1] transition-[filter] duration-500 group-hover:grayscale-0"
+                title="Megumi Design location"
+              />
+              <a
+                href={mapLinkUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-3 right-3 z-10 rounded-full border border-gold-500/50 bg-ink-950/80 px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.15em] text-gold-400 backdrop-blur-sm transition-colors hover:bg-gold-500 hover:text-ink-950"
+              >
+                Open in Google Maps ↗
+              </a>
+            </div>
           </Reveal>
 
           <Reveal direction="left" delay={0.1} className="md:col-span-3">

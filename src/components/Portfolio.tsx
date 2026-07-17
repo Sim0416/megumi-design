@@ -9,18 +9,8 @@ import { urlFor } from "@/sanity/lib/image";
 import type { Project } from "@/sanity/lib/types";
 
 export function Portfolio({ projects }: { projects: Project[] }) {
-  const categories = useMemo(() => {
-    const set = new Set<string>();
-    projects.forEach((p) => p.category && set.add(p.category));
-    return ["All", ...Array.from(set)];
-  }, [projects]);
-
-  const [active, setActive] = useState("All");
   const [selected, setSelected] = useState<Project | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
-
-  const filtered =
-    active === "All" ? projects : projects.filter((p) => p.category === active);
 
   const galleryImages = useMemo(() => {
     if (!selected) return [];
@@ -46,32 +36,12 @@ export function Portfolio({ projects }: { projects: Project[] }) {
           </Reveal>
         </div>
 
-        <Reveal
-          direction="up"
-          delay={0.15}
-          className="mt-12 flex flex-wrap items-center gap-3"
-        >
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActive(cat)}
-              className={`rounded-full border px-5 py-2.5 font-body text-sm uppercase tracking-[0.15em] transition-colors ${
-                active === cat
-                  ? "border-gold-500 bg-gold-500 text-ink-950"
-                  : "border-gold-700/40 text-paper-100/60 hover:border-gold-500 hover:text-gold-400"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </Reveal>
-
         <RevealGroup
           className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
           stagger={0.08}
         >
           <AnimatePresence mode="popLayout">
-            {filtered.map((project) => {
+            {projects.map((project) => {
               const imageUrl = project.coverImage
                 ? urlFor(project.coverImage).width(900).height(1100).url()
                 : null;
@@ -135,9 +105,9 @@ export function Portfolio({ projects }: { projects: Project[] }) {
               exit={{ opacity: 0, y: 24, scale: 0.98 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
-              className="relative grid max-h-[85vh] w-full max-w-4xl grid-cols-1 overflow-y-auto rounded-sm border border-gold-700/30 bg-ink-900 md:grid-cols-2"
+              className="relative grid max-h-[92vh] w-full max-w-6xl grid-cols-1 overflow-y-auto rounded-sm border border-gold-700/30 bg-ink-900 md:grid-cols-5"
             >
-              <div className="group relative min-h-[260px] w-full md:min-h-full">
+              <div className="group relative min-h-[360px] w-full md:col-span-3 md:min-h-[640px]">
                 {galleryImages.length > 0 ? (
                   <Image
                     key={galleryIndex}
@@ -148,8 +118,8 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                     className="object-cover"
                   />
                 ) : (
-                  <div className="washi-grain flex h-full min-h-[260px] w-full items-center justify-center bg-gradient-to-br from-ink-800 to-ink-950">
-                    <span className="text-outline-gold font-display text-8xl font-black opacity-20">
+                  <div className="washi-grain flex h-full min-h-[360px] w-full items-center justify-center bg-gradient-to-br from-ink-800 to-ink-950">
+                    <span className="text-outline-gold font-display text-9xl font-black opacity-20">
                       {selected.title.charAt(0)}
                     </span>
                   </div>
@@ -188,7 +158,7 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                   </>
                 )}
               </div>
-              <div className="p-8 md:p-10">
+              <div className="flex flex-col justify-center p-8 md:col-span-2 md:p-10">
                 {selected.category && (
                   <span className="font-body text-xs uppercase tracking-[0.25em] text-gold-400">
                     {selected.category}
