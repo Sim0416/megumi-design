@@ -68,7 +68,7 @@ export const fallbackServices: Service[] = [
   },
 ];
 
-const fallbackCategories = [
+const fallbackProjectTitles = [
   "Sofa",
   "Pet Cabinet & Furniture",
   "Bedroom",
@@ -80,11 +80,10 @@ const fallbackCategories = [
   "Wardrobe / Sliding Door / Open Door",
 ];
 
-export const fallbackProjects: Project[] = fallbackCategories.map(
-  (category, i) => ({
+export const fallbackProjects: Project[] = fallbackProjectTitles.map(
+  (title, i) => ({
     _id: `fallback-project-${i}`,
-    title: category,
-    category,
+    title,
     excerpt: "Add photos for this collection from the Studio.",
     featured: i < 6,
   })

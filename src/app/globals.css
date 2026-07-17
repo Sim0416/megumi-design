@@ -120,10 +120,11 @@
 
   .kanji-watermark {
     font-family: var(--font-jp);
-    color: var(--color-gold-500);
-    opacity: 0.06;
+    color: var(--color-gold-400);
+    opacity: 0.16;
     line-height: 1;
     user-select: none;
+    text-shadow: 0 0 120px rgba(212, 168, 87, 0.35);
   }
 
   .ember {

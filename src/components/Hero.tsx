@@ -47,7 +47,7 @@ export function Hero({ settings }: { settings: SiteSettings }) {
 
       <span
         aria-hidden
-        className="kanji-watermark pointer-events-none absolute -right-10 top-1/2 -translate-y-1/2 select-none text-[38vw] leading-none md:text-[26vw]"
+        className="kanji-watermark pointer-events-none absolute -right-6 top-1/2 -translate-y-1/2 select-none text-[40vw] leading-none md:text-[29vw]"
       >
         惠
       </span>

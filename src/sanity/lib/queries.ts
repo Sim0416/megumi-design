@@ -43,7 +43,6 @@ export const projectsQuery = groq`
   *[_type == "project"] | order(order asc){
     _id,
     title,
-    category,
     coverImage,
     gallery,
     excerpt,
@@ -56,7 +55,6 @@ export const featuredProjectsQuery = groq`
   *[_type == "project" && featured == true] | order(order asc){
     _id,
     title,
-    category,
     coverImage,
     excerpt,
     "slug": slug.current

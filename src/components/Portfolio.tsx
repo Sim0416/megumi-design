@@ -74,12 +74,7 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/20 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-95" />
 
                   <div className="absolute inset-x-0 bottom-0 translate-y-2 p-6 opacity-90 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                    {project.category && (
-                      <span className="font-body text-xs uppercase tracking-[0.25em] text-gold-400">
-                        {project.category}
-                      </span>
-                    )}
-                    <h3 className="mt-2 font-display text-xl text-paper-50 md:text-2xl">
+                    <h3 className="font-display text-xl text-paper-50 md:text-2xl">
                       {project.title}
                     </h3>
                   </div>
@@ -132,14 +127,14 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                       onClick={() =>
                         setGalleryIndex((i) => (i - 1 + galleryImages.length) % galleryImages.length)
                       }
-                      className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-paper-100/30 bg-ink-950/60 text-paper-100 opacity-0 transition-opacity duration-300 hover:border-gold-400 hover:text-gold-400 group-hover:opacity-100"
+                      className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-paper-100/30 bg-ink-950/60 text-lg text-paper-100 opacity-80 transition-opacity duration-300 hover:border-gold-400 hover:text-gold-400 hover:opacity-100 md:opacity-0 md:group-hover:opacity-100"
                     >
                       ‹
                     </button>
                     <button
                       aria-label="Next photo"
                       onClick={() => setGalleryIndex((i) => (i + 1) % galleryImages.length)}
-                      className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-paper-100/30 bg-ink-950/60 text-paper-100 opacity-0 transition-opacity duration-300 hover:border-gold-400 hover:text-gold-400 group-hover:opacity-100"
+                      className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-paper-100/30 bg-ink-950/60 text-lg text-paper-100 opacity-80 transition-opacity duration-300 hover:border-gold-400 hover:text-gold-400 hover:opacity-100 md:opacity-0 md:group-hover:opacity-100"
                     >
                       ›
                     </button>
@@ -159,12 +154,7 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                 )}
               </div>
               <div className="flex flex-col justify-center p-8 md:col-span-2 md:p-10">
-                {selected.category && (
-                  <span className="font-body text-xs uppercase tracking-[0.25em] text-gold-400">
-                    {selected.category}
-                  </span>
-                )}
-                <h3 className="mt-3 font-display text-3xl text-paper-50 md:text-4xl">
+                <h3 className="font-display text-3xl text-paper-50 md:text-4xl">
                   {selected.title}
                 </h3>
                 {selected.excerpt && (

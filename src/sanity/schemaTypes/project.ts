@@ -19,27 +19,6 @@ export const project = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "category",
-      title: "分类",
-      type: "string",
-      options: {
-        list: [
-          { title: "Tender Project", value: "Tender Project" },
-          { title: "Sofa", value: "Sofa" },
-          { title: "Exporting OEM Furniture", value: "Exporting OEM Furniture" },
-          { title: "Bedroom", value: "Bedroom" },
-          { title: "Modern Minimalist Interior Design", value: "Modern Minimalist Interior Design" },
-          { title: "Pet Cabinet & Furniture", value: "Pet Cabinet & Furniture" },
-          { title: "TV Console / Cabinet", value: "TV Console / Cabinet" },
-          { title: "Study Table", value: "Study Table" },
-          { title: "Shoes Cabinet / Rack", value: "Shoes Cabinet / Rack" },
-          { title: "Bookshelf Cabinet", value: "Bookshelf Cabinet" },
-          { title: "Kitchen Cabinet", value: "Kitchen Cabinet" },
-          { title: "Wardrobe / Sliding Door / Open Door", value: "Wardrobe / Sliding Door / Open Door" },
-        ],
-      },
-    }),
-    defineField({
       name: "coverImage",
       title: "封面图",
       type: "image",
@@ -79,6 +58,6 @@ export const project = defineType({
     },
   ],
   preview: {
-    select: { title: "title", subtitle: "category", media: "coverImage" },
+    select: { title: "title", subtitle: "excerpt", media: "coverImage" },
   },
 });

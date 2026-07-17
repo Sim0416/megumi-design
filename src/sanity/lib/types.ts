@@ -44,7 +44,6 @@ export interface Service {
 export interface Project {
   _id: string;
   title: string;
-  category?: string;
   coverImage?: Image;
   gallery?: Image[];
   excerpt?: string;
